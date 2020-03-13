@@ -13,20 +13,33 @@
     <style>
       .topleft {
         position: absolute;
-        top: 32px;
-        left: 48px;
+        top: 5%;
+        left: 5%;
       }
 
       .topright {
         position: absolute;
-        top: 32px;
-        right: 48px
+        top: 5%;
+        right: 5%;
+      }
+
+      .topcentre {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0%;
+        right: 0%;
+        top: 15%;
       }
 
       .inputbox {
         height: 40px;
         width: 300px;
         font-size: 30px;
+      }
+
+      ul {
+        list-style-position: inside;
       }
 
     </style>
@@ -41,6 +54,7 @@
       // initial parameters
     var score = 0;
     var savings = 0;
+    var month = 1;
 
       // common parameters
     var savings_per_round = 500;
@@ -86,27 +100,32 @@
     '<p>In this experiment, you will play a financial decision-making game.</p>' +
     '<p>Click the <b>NEXT</b> button or use the arrow keys to continue.</p>'
 
-    var instructions_2 = 'You have decided that it is time to open your first savings account.' +
-    '<p>Your opening account balance is $0.</p>' +
-    '<p>Your savings account balance will be tracked in the top left corner of the screen.</p>' +
-    '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6" color="red"><b>Savings: $'+savings+'</b></font></div>'
+    var instructions_2 = 'You have started a new job that provides you with a monthly income.' +
+    '<p>Each month, after covering your expenses, you are left with a disposable income of $500.</p>'
 
-    var instructions_3 = 'You have a job which pays you at the start of each month.' +
-    '<p>Each month, after paying your bills, you are left with a disposable income of $'+savings_per_round+'.</p>' +
-    'You will be asked to decide how much of your money you would like to spend each month.</p>' +
-    'You will be able to spend any amount up to your current savings account balance.</p>'
+    var instructions_3 = 'You decide that you want to start savings towards a goal.' +
+    '<p>Your goal is to have $6,000 saved after 30 months.</p>'
 
-    var instructions_4 = 'The money you spend will earn you points.' +
-    '<p>For every '+reward_rate+' points you earn, you will be rewarded with $0.10 of real money.</p>' +
-    '<p>The more money you spend within a month, the more points you will earn.</p>' +
+    var instructions_4 = 'Each month, you will be asked to decide how much of your money to spend and save.' +
+    '<p>Your objective in this game is to manage your spending and saving behaviour to score as many points as possible.</p>' +
+    '<br>You can earn points in two ways.' +
+    '<p><b>Spending:</b> You will be rewarded with 5 points for every $1 that you spend.</p>' +
+    '<p><b>Saving:</b> If you reach your savings goal, you will be rewarded with 30,000 bonus points. Otherwise, you will receive no bonus points.</p>' +
+    '<br>Once the experiment has been completed, the top 20% highest scoring participants will receive a $20 reward.' +
+    '<br> '
+
+    var instructions_5 =
+    '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
+    '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6" color="red"><b>Savings: $'+savings+'</b></font></div>' +
     '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
     '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6" color="red"><b>Score: '+score+' points</b></font></div>'
 
-    var instructions_5 = 'At the end of the game, you will experience a financial emergency.' +
-    '<p>If you have saved enough money, you win the game and will be rewarded based on your points score.</p>' +
-    '<p>However, if you have not saved enough, you lose the game and will receive <b>no reward.</b></p>' +
-    '<p>Your goal in this game is to earn as many points as possible while saving enough for the financial emergency.</p>' +
-    '<p><font color="red">Note: You will not be warned prior to the financial emergency. You will also not be told how much the financial emergency will cost.</font></p>'
+    var instructions_6 = '<b><u>Summary</u></b>' +
+    '<p>You will receive $500 each month that can be spent or saved.</p>' +
+    '<p>Your savings goal is to have saved $6,000 after 30 rounds.</p>' +
+    '<p>Every $1 that you spend will earn 5 points.</p>' +
+    '<p>Reaching your savings goal will earn a bonus 30,000 points. Not reaching it will earn no bonus points.</p>' +
+    '<p>Your objective is to score as many points as possible.</p>'
 
     var starting_instructions = {
 
@@ -116,7 +135,8 @@
         instructions_2,
         instructions_3,
         instructions_4,
-        instructions_5
+        instructions_5,
+        instructions_6
       ],
       show_clickable_nav: true
     };
@@ -184,6 +204,9 @@
 
         // add savings for next round
         savings += savings_per_round
+
+        // update month for next round
+        month += 1
       }
     };
 
@@ -291,9 +314,10 @@
         },
         choices: ['<p style="font-size:130%;line-height:0%;"><b>Start</b></p>'],
         on_finish: function(trial) {
-          // reset savings and score
+          // reset savings, score, and month
           savings = 500
           score = 0
+          month = 1
         }
     };
 
@@ -343,6 +367,9 @@
 
         // add savings for next round
         savings += savings_per_round
+
+        // update month for next round
+        month += 1
       }
     };
 
@@ -461,7 +488,7 @@
     }
 
     timeline.push(fullscreenOn)
-    timeline.push(instructions_stage)
+    //timeline.push(instructions_stage)
     timeline.push(practice_rounds)
     timeline.push(practice_emergency)
     timeline.push(exp_rounds)

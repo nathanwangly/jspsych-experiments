@@ -126,6 +126,9 @@ jsPsych.plugins['free-text-response'] = (function() {
       html += '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6"><b>Savings: $'+savings+'</b></font></div>';
     }
 
+    //add month #
+    html += '<div id="jspsych-survey-text-custom-topcentre" class="topcentre"><font size="6"><b>Month '+month+'</b></font></div>'
+
     // show preamble text
     if(trial.preamble !== null){
       html += '<div id="jspsych-survey-text-preamble" class="jspsych-survey-text-preamble">'+trial.preamble+'</div>';
