@@ -118,16 +118,13 @@ jsPsych.plugins['free-text-response'] = (function() {
     var html = '';
     // show top left corner text
     if(trial.topleft == true){
-      html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6"><b>Score: '+score+' points</b></font></div>';
+      html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em"><b>Score: '+score+' points</b></font></div>';
     }
 
     // show top right corner text
     if(trial.topright == true){
-      html += '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6"><b>Savings: $'+savings+'</b></font></div>';
+      html += '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6em"><b>Savings: $'+savings+'</b></font></div>';
     }
-
-    //add month #
-    html += '<div id="jspsych-survey-text-custom-topcentre" class="topcentre"><font size="6"><b>Month '+month+'</b></font></div>'
 
     // show preamble text
     if(trial.preamble !== null){

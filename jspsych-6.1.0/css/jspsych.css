@@ -44,7 +44,7 @@
 
 .jspsych-display-element {
   font-family: 'Open Sans', 'Arial', sans-serif;
-  font-size: 24px;
+  font-size: 1.2em;
   line-height: 1.6em;
 }
 
@@ -52,7 +52,7 @@
 
 .jspsych-display-element input[type="text"] {
   font-family: 'Open Sans', 'Arial', sans-serif;
-  font-size: 14px;
+  font-size: 1.2em;
 }
 
 /* borrowing Bootstrap style for btn elements, but combining styles a bit */
@@ -60,7 +60,7 @@
   display: inline-block;
   padding: 6px 12px;
   margin: 0px;
-  font-size: 14px;
+  font-size: 0.8em;
   font-weight: 400;
   font-family: 'Open Sans', 'Arial', sans-serif;
   cursor: pointer;
