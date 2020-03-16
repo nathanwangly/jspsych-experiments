@@ -71,15 +71,8 @@
       // points conversion rate
     conversion = function(amount_spent) {
 
-      if (amount_spent <= 250) {
-        points = amount_spent
-      } else if (amount_spent <= 750) {
-        points = ((Math.pow(amount_spent, 2)) - (3000 * amount_spent) + 562500) / -500
-      } else if (amount_spent <= 5000) {
-        points = ((11 * (Math.pow(amount_spent, 2))) - (110000 * amount_spent) - 86250000) / -72250
-      } else if (amount_spent > 5000) {
-        points = amount_spent
-      }
+      points = amount_spent * 5
+
       return(Math.round(points))
     }
 
@@ -98,7 +91,7 @@
     /* instructions stage */
     var instructions_1 = 'Welcome to the experiment.' +
     '<p>In this experiment, you will play a financial decision-making game.</p>' +
-    '<p>Click the <b>NEXT</b> button or use the arrow keys to continue.</p>'
+    '<br><p>Click the <b>NEXT</b> button or use the arrow keys to continue.</p>'
 
     var instructions_2 = 'You have started a new job that provides you with a monthly income.' +
     '<p>Each month, after covering your expenses, you are left with a disposable income of $500.</p>'
@@ -111,21 +104,21 @@
     '<br>You can earn points in two ways.' +
     '<p><b>Spending:</b> You will be rewarded with 5 points for every $1 that you spend.</p>' +
     '<p><b>Saving:</b> If you reach your savings goal, you will be rewarded with 30,000 bonus points. Otherwise, you will receive no bonus points.</p>' +
-    '<br>Once the experiment has been completed, the top 20% highest scoring participants will receive a $20 reward.' +
-    '<br> '
+    '<br>Once the experiment has been completed, the top 20% highest scoring participants will receive a $20 reward.'
 
     var instructions_5 =
     '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
-    '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6" color="red"><b>Savings: $'+savings+'</b></font></div>' +
+    '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em" color="red"><b>Savings: $'+savings+'</b></font></div>' +
     '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
-    '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6" color="red"><b>Score: '+score+' points</b></font></div>'
+    '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6em" color="red"><b>Score: '+score+' points</b></font></div>'
 
     var instructions_6 = '<b><u>Summary</u></b>' +
     '<p>You will receive $500 each month that can be spent or saved.</p>' +
     '<p>Your savings goal is to have saved $6,000 after 30 rounds.</p>' +
     '<p>Every $1 that you spend will earn 5 points.</p>' +
     '<p>Reaching your savings goal will earn a bonus 30,000 points. Not reaching it will earn no bonus points.</p>' +
-    '<p>Your objective is to score as many points as possible.</p>'
+    '<p>Your objective is to score as many points as possible.</p>' +
+    '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
 
     var starting_instructions = {
 
@@ -144,10 +137,9 @@
     var start_practice_rounds = {
         type: 'html-button-response',
         stimulus: function() {
-          return 'You will now be presented with several practice rounds.' +
+          return 'You will now be presented with several practice rounds to familiarise yourself with the task.' +
           '<p>The practice rounds are identical to the actual game rounds.</p>' +
-          '<p>After the final practice round, there will be a financial emergency, like in the real game.</p>' +
-          '<p>Click the START button when you are ready to proceed to the practice rounds.</p>'
+          '<br><p>Click the <b>START</b> button when you are ready to begin.</p>'
         },
         choices: ['<p style="font-size:130%;line-height:0%;"><b>START!</b></p>'],
         on_finish: function(trial) {
@@ -489,7 +481,7 @@
     }
 
     timeline.push(fullscreenOn)
-    //timeline.push(instructions_stage)
+    timeline.push(instructions_stage)
     timeline.push(practice_rounds)
     timeline.push(practice_emergency)
     timeline.push(exp_rounds)
