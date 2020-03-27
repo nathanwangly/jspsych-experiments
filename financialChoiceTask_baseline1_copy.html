@@ -9,6 +9,7 @@
         <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-survey-html-form.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-survey-text.js"></script>
 
         <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
@@ -104,6 +105,21 @@
         return true;
       }
     };
+
+    /* Participant details collection */
+    var participant_details = {
+      type: 'survey-html-form',
+      preamble: '<h2>Participant Details</h2>',
+      html: '<br><p><b>Age (years)</b></p><input name="age" type="number" min="0" max="99" style="width: 5em; height: 1.5em; font-size:1.2em" required/></p>' +
+      '<br><b>Sex</b></p>' +
+      '<input type="radio" name="gender" value="male" required> Male   ' +
+      '<input type="radio" name="gender" value="female" required> Female   ' +
+      '<input type="radio" name="gender" value="other" required> Other   ' +
+      '<input type="radio" name="gender" value="na" required> Prefer not to say   ' +
+      '<br><br><p><b>Email address (optional)</b></p>' +
+      '<p>Your email address will only be used to contact you in the event <br> that you win a monetary reward from participating in this experiment.</p>' +
+      '<input name="email" type="text"/></p>'
+    }
 
     /* instructions stage */
     var instructions_1 = 'Welcome to the experiment.' +
@@ -466,8 +482,9 @@
       timeline: [end_exp_rounds, outcome_spending, outcome_saving, outcome_final]
     };
 
-    timeline.push(fullscreenOn)
-    timeline.push(consent)
+    //timeline.push(fullscreenOn)
+    //timeline.push(consent)
+    timeline.push(participant_details)
     timeline.push(instructions_stage)
     timeline.push(practice_rounds)
     timeline.push(end_practice_rounds)
