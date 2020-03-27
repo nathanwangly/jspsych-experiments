@@ -1,0 +1,102 @@
+#consent, #debrief {
+    background-color: white;
+    color: black;
+    width: 90%;
+    max-width: 960px;
+    margin: auto;
+    line-height: 150%;
+    font-family: "Arial", "Helvetica", sans-serif;
+    padding: 1%;
+    font-size: 1em;
+    text-align: left;
+}
+
+#consent p, h2, h3, h4 {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#consent ol, ul, dl {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#consent li {
+    padding-bottom: 0.2em;
+}
+
+#debrief p, h2, h3, h4 {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#debrief ol, ul, dl {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+#debrief li {
+    padding-bottom: 0.2em;
+}
+
+#consent code,
+pre,
+samp {
+    font-size: 0.92em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+#consent li > :first-child {
+    font-weight: bold;
+}
+
+#debrief li > :first-child {
+    font-style: italic;
+}
+
+#banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#school {
+    text-align: center;
+    flex: 2;
+}
+
+#main_title, #study_title{
+    text-align: center;
+    font-weight: bold;
+}
+
+#main_title {
+    text-transform: uppercase;
+}
+
+.bolden {
+    font-weight: bold;
+}
+
+#consent_button, #debrief_button {
+    text-align: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.box {
+    border: grey;
+    border-style: solid;
+    border-width: thin;
+    padding: 0.75em;
+    margin-bottom: 2em;
+}
+
+.embiggen {
+    font-size-adjust: 0.6;
+}
+
+#consent ol {
+    margin-bottom: 3em;
+}
