@@ -2,6 +2,8 @@
 <html>
     <head>
         <title>My experiment</title>
+        <script src="/assets/javascripts/jatos.js"></script>
+
         <script src="jspsych-6.1.0/jspsych.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
@@ -66,12 +68,23 @@
     var savings_per_round = 500;
 
       // practice stage parameters
-    var n_practice_rounds = 1;
+    var n_practice_rounds = 10;
+        // show savings goal?
+    var goal_tracker = false;
 
       // exp stage parameters
-    var n_exp_rounds = 3;
+    var n_exp_rounds = 30;
     var savings_goal = 6000;
-    var savings_reward = 45000; //max points earned by reaching savings reward and spending all other money
+
+        // vary savings reward based on condition; 0 = low, 1 = high
+    var condition = Math.round(Math.random())
+    if (condition == 0){
+      group = 'low savings reward' //max points earned by saving nothing and spending all money
+      var savings_reward = 15000
+    } else {
+      group = 'high savings reward' //max points earned by reaching savings reward and spending all other money
+      var savings_reward = 45000
+    }
 
       // points conversion rate
     conversion = function(amount_spent) {
@@ -85,7 +98,8 @@
       // track participant ID in experiment data
     jsPsych.data.addProperties({
   	  participantID: participant_id,
-  	  dateTime: new Date().toLocaleString()
+  	  dateTime: new Date().toLocaleString(),
+      group: group
   	});
 
     /* open in fullscreen */
@@ -149,24 +163,28 @@
     '<p>Each month, after covering your expenses, you are left with a disposable income of $'+savings_per_round+'.</p>'
 
     var instructions_3 = 'You decide that you want to start savings towards a goal.' +
-    '<p>Your goal is to have $'+savings_goal+' saved after '+n_exp_rounds+' months.</p>'
+    '<p>Your goal is to have $'+savings_goal+' saved by the end of the '+n_exp_rounds+' months.</p>'
 
     var instructions_4 = 'Each month, you will be asked to decide how much of your money to spend and save.' +
     '<p>Your objective in this game is to manage your spending and saving behaviour to score as many points as possible.</p>' +
     '<br>You can earn points in two ways.' +
     '<p><b>Spending:</b> You will be rewarded with 5 points for every $1 that you spend.</p>' +
-    '<p><b>Saving:</b> If you reach your savings goal, you will be rewarded with '+savings_reward+' bonus points. Otherwise, you will receive no bonus points.</p>' +
-    '<br>Once the experiment has been completed, the top 20% highest scoring participants will receive a $20 reward.'
+    '<p><b>Saving:</b> If you reach your savings goal, you will also be rewarded with '+savings_reward+' points. Otherwise, you will receive no additional points.</p>' +
+    '<br><p>At the end of the experiment, your points from spending and saving will be combined to determine your score.</p>'
 
-    var instructions_5 =
+    var instructions_5 = 'Once all participants have completed the experiment, the top 20% highest scoring participants will receive a real $20 reward.' +
+    '<p>If you are one of these participants, you will be contacted via the email address you provided earlier.</p>'
+
+    var instructions_6 =
     '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
     '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em" color="red"><b>Savings: $'+savings+'</b></font></div>' +
     '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
     '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6em" color="red"><b>Score: '+score+' points</b></font></div>'
 
-    var instructions_6 = '<b><u>Summary</u></b>' +
-    '<p>You will receive $'+savings_per_round+' each month that can be spent or saved.</p>' +
-    '<p>Your savings goal is to have saved $'+savings_goal+' after '+n_exp_rounds+' months.</p>' +
+    var instructions_7 = '<b><u>Summary</u></b>' +
+    '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+    'You will receive $'+savings_per_round+' each month that can be spent or saved.</p>' +
+    '<p>Your savings goal is to have $'+savings_goal+' saved by the end of the game.</p>' +
     '<p>Every $1 that you spend will earn 5 points.</p>' +
     '<p>Reaching your savings goal will earn a bonus '+savings_reward+' points. Not reaching it will earn no bonus points.</p>' +
     '<p>Your objective is to score as many points as possible.</p>' +
@@ -181,7 +199,8 @@
         instructions_3,
         instructions_4,
         instructions_5,
-        instructions_6
+        instructions_6,
+        instructions_7
       ],
       show_clickable_nav: true
     };
@@ -212,9 +231,9 @@
       topleft: true,
       topright: true,
       preamble: function() {
-        return '<b>Month '+month+'</b>' +
+        return '<b>Month '+month+' of '+n_practice_rounds+'</b>' +
         '<br><br><p>You have saved another $'+savings_per_round+' this month. Your savings account balance is now $'+savings+'.</p>' +
-        '<p>Please enter the amount you would like to spend this month in the box below.</p>'
+        '<p>Please enter the amount you would like to <b>spend</b> this month in the box below.</p>'
       },
       questions: [
       {prompt: '',
@@ -333,9 +352,9 @@
       topleft: true,
       topright: true,
       preamble: function() {
-        return '<b>Month '+month+'</b>' +
+        return '<b>Month '+month+ ' of ' + n_exp_rounds+'</b>' +
         '<br><br><p>You have saved another $'+savings_per_round+' this month. Your savings account balance is now $'+savings+'.</p>' +
-        '<p>Please enter the amount you would like to spend this month in the box below.</p>'
+        '<p>Please enter the amount you would like to <b>spend</b> this month in the box below.</p>'
       },
       questions: [
       {prompt: '',
@@ -345,6 +364,10 @@
       ],
       data: {stage: 'exp',
              type: 'choice'},
+      on_start: function(trial) {
+        // show savings goal
+        goal_tracker = true;
+      },
       on_finish: function(data, trial) {
         amount_spent_string = 'This round you spent $'+response+'.'
 
@@ -443,7 +466,8 @@
           '<p>Points earned from spending: '+score+' points</p>' +
           '<p>Points earned from saving: '+savings_reward+' points</p>' +
           '<br><p>Thank you for participating in this experiment :)</p>' +
-          '<p>Please let the experimenter know that you are finished!</p>'
+          '<p>Click the <b>CONTINUE</b> button to proceed to the debriefing stage.</p>' +
+          '<p><font color="red">Please DO NOT exit the browser. You will need to click a link after the debrief to receive your SONA credit.</font></p>'
         }
     };
 
@@ -478,35 +502,43 @@
 
     /* final outcome screen */
     var outcome_final = {
-
-      type: 'html-keyboard-response',
-      stimulus: function() {
-        return final_score
-      },
-      choices: [81]
-    }
+        type: 'html-button-response',
+        stimulus: function() {
+          return final_score
+        },
+        choices: ['<p style="font-size:130%;line-height:0%;"><b>Continue</b></p>']
+    };
 
     var end_stage_e = {
       timeline: [end_exp_rounds, outcome_spending, outcome_saving, outcome_final]
     };
 
+    var debrief = {
+      type: 'external-html',
+      url: 'debrief_exp.html',
+      cont_btn: 'been_debriefed'
+    }
+
     timeline.push(fullscreenOn)
     timeline.push(consent)
     timeline.push(participant_details)
     timeline.push(instructions_stage)
-    //timeline.push(practice_rounds)
-    //timeline.push(end_practice_rounds)
-    //timeline.push(exp_rounds)
+    timeline.push(practice_rounds)
+    timeline.push(end_practice_rounds)
+    timeline.push(exp_rounds)
     timeline.push(end_stage_e)
+    timeline.push(debrief)
 
     /* start the experiment */
-    jsPsych.init({
+    jatos.onLoad(function() {
+      jsPsych.init({
       timeline: timeline,
       on_finish: function(){
-        jsPsych.data.displayData();
-        jsPsych.data.get();
+        var resultJson = jsPsych.data.get().json();
+        jatos.submitResultData(resultJson, jatos.startNextComponent);
       }
     });
+  });
 
     </script>
 </html>
