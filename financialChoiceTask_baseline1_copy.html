@@ -3,13 +3,16 @@
     <head>
         <title>My experiment</title>
         <script src="jspsych-6.1.0/jspsych.js"></script>
+        <script src="jspsych-6.1.0/plugins/jspsych-external-html.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-fullscreen.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-free-text-response.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-html-keyboard-response.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-html-button-response.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-instructions.js"></script>
         <script src="jspsych-6.1.0/plugins/jspsych-survey-text.js"></script>
+
         <link href="jspsych-6.1.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+        <link href="ethics_exp.css" rel="stylesheet" type="text/css">
     </head>
     <style>
       .topleft {
@@ -86,6 +89,21 @@
       button_label: 'Begin the experiment!',
       delay_after: 200
     }
+
+    /* ethics */
+    var consent = {
+      type: 'external-html',
+      url: 'consent_exp.html',
+      cont_btn: 'consented',
+      check_fn: function() {
+        jsPsych.data.addProperties(
+          {
+            wants_copy: document.getElementById('copy').checked,
+          }
+        );
+        return true;
+      }
+    };
 
     /* instructions stage */
     var instructions_1 = 'Welcome to the experiment.' +
@@ -449,6 +467,7 @@
     };
 
     timeline.push(fullscreenOn)
+    timeline.push(consent)
     timeline.push(instructions_stage)
     timeline.push(practice_rounds)
     timeline.push(end_practice_rounds)
