@@ -162,7 +162,6 @@ jsPsych.plugins['free-text-response'] = (function() {
 
       function handleChange(){
         var newText = input.value;
-        console.log(newText.length)
         if (newText.length == 0){
           replacement_remainder = savings
         } else {
