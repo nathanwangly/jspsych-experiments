@@ -186,17 +186,6 @@
       show_clickable_nav: true
     };
 
-    /* email collection */
-    var participant_emails = {
-      type: 'survey-text',
-      questions: [
-        {prompt: "Email address", columns: 30}
-      ],
-      preamble: '<b>If you would like to be contacted in the event that you win the $20 reward, please enter your email below.</b>' +
-      '<p>Otherwise, leave the field blank.</p>' +
-      '<p>This is optional and will not affect your SONA credits.</p>'
-    };
-
     var start_practice_rounds = {
         type: 'html-button-response',
         stimulus: function() {
@@ -213,7 +202,7 @@
     };
 
     var instructions_stage = {
-      timeline: [starting_instructions, participant_emails, start_practice_rounds],
+      timeline: [starting_instructions, start_practice_rounds],
     }
 
     /* practice rounds */
@@ -501,10 +490,10 @@
       timeline: [end_exp_rounds, outcome_spending, outcome_saving, outcome_final]
     };
 
-    //timeline.push(fullscreenOn)
-    //timeline.push(consent)
+    timeline.push(fullscreenOn)
+    timeline.push(consent)
     timeline.push(participant_details)
-    //timeline.push(instructions_stage)
+    timeline.push(instructions_stage)
     //timeline.push(practice_rounds)
     //timeline.push(end_practice_rounds)
     //timeline.push(exp_rounds)
