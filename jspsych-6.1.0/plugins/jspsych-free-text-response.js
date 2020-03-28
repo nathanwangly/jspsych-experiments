@@ -152,7 +152,6 @@ jsPsych.plugins['free-text-response'] = (function() {
     html += '<input type="submit" id="jspsych-survey-text-next" class="jspsych-btn jspsych-survey-text" value="'+trial.button_label+'"></input>';
     html += '</form>'
 
-
     // update in realtime based on text input
     function set(el, text){
       while(el.firstChild)el.removeChild(el.firstChild);
