@@ -13,12 +13,12 @@ var cum_spending = 0
 var savings_per_round = 500;
 
   // practice stage parameters
-var n_practice_rounds = 5;
+var n_practice_rounds = 10;
     // show savings goal?
 var goal_tracker = false;
 
   // exp stage parameters
-var n_exp_rounds = 10;
+var n_exp_rounds = 30;
 var savings_goal = 6000;
 
     // vary savings reward based on condition; 0 = low, 1 = high
