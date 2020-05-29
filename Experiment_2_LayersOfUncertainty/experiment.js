@@ -20,7 +20,7 @@ var income_array_exp = [100, 200, 300]
 
   // savings goal parameters
 var n_exp_rounds = 3;
-var savings_goal = 6000;
+var savings_goal = 100;
 var min_savings_goal = 4000;
 var max_savings_goal = 8000;
 
@@ -361,10 +361,16 @@ var instructions_reminder = {
     on_finish: function(trial) {
 
       // reset savings, score, month, and cumulative spending
-      savings = 500;
+      savings = 0;
       score = 0;
       month = 1;
       cum_spending = 0;
+
+      // add initial savings (first round only)
+      if (income_condition == 1){
+        income = income_array_exp[month-1]
+      }
+      savings += income
     }
 };
 
@@ -421,6 +427,9 @@ var choice_e = {
     })
 
     // add savings for next round
+    if (income_condition == 1){
+      income = income_array_exp[month]
+    }
     savings += income
 
     // update month for next round
