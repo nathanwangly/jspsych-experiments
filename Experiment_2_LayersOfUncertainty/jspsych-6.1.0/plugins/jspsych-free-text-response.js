@@ -119,11 +119,7 @@ jsPsych.plugins['free-text-response'] = (function() {
 
     // show top left corner text
     if(trial.topleft == true){
-      if(goal_tracker){
-        html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em"><b>Savings: $'+savings+' / $' +savings_goal+'</b></font></div>';
-      } else {
-        html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em"><b>Savings: $'+savings+'</b></font></div>';
-      }
+      html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em"><b>Savings: $'+savings+'</b></font></div>';
     }
 
     // show top right corner text
