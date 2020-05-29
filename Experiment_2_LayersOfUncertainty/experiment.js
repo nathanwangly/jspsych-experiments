@@ -298,15 +298,17 @@ var choice_p = {
       savings_remaining: savings
     })
 
-    // add savings for next round
-    if (income_condition == 1){
-      income = income_array_p[month]
-    }
-    savings += income
+    // add savings for next round (except if last round)
+    if (month < n_practice_rounds){
+      if (income_condition == 1){
+        income = income_array_p[month]
+      }
+      savings += income
 
-    // update month for next round
-    month += 1
-  }
+      // update month for next round
+      month += 1
+    }
+  }  
 };
 
 var feedback_p = {
@@ -426,14 +428,16 @@ var choice_e = {
       savings_remaining: savings
     })
 
-    // add savings for next round
-    if (income_condition == 1){
-      income = income_array_exp[month]
-    }
-    savings += income
+    // add savings for next round (except if last round)
+    if (month < n_exp_rounds){
+      if (income_condition == 1){
+        income = income_array_exp[month]
+      }
+      savings += income
 
-    // update month for next round
-    month += 1
+      // update month for next round
+      month += 1
+    }
   }
 };
 
@@ -465,9 +469,6 @@ var end_exp_rounds = {
     },
     choices: ['<p style="font-size:130%;line-height:0%;"><b>Continue</b></p>'],
     on_finish: function(trial) {
-
-      // subtract extra savings added during final trial
-      savings += -income
 
       // calculate spending score
       spending_score = '<h2>Spending</h2>' +
