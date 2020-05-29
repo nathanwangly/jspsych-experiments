@@ -14,14 +14,18 @@ var income = 500;
 var min_income = 250;
 var max_income = 750;
 
+    // income arrays for uncertain income conditions
+var income_array_p = [400, 500, 600]
+var income_array_exp = [100, 200, 300]
+
   // savings goal parameters
-var n_exp_rounds = 2;
+var n_exp_rounds = 3;
 var savings_goal = 6000;
 var min_savings_goal = 4000;
 var max_savings_goal = 8000;
 
   // practice stage length
-var n_practice_rounds = 1;
+var n_practice_rounds = 3;
 
   // show savings goal?
 var goal_tracker = false;
@@ -32,8 +36,35 @@ var goal_tracker = false;
 var income_condition = Math.round(Math.random())
 var goal_condition = Math.round(Math.random())
 
+    // shuffle income array if in uncertain income condition
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+if (income_condition == 1){
+  income_array_p = shuffle(income_array_p)
+  income_array_exp = shuffle(income_array_exp)
+}
+
 console.log(income_condition)
 console.log(goal_condition)
+console.log(income_array_p)
+console.log(income_array_exp)
 
   // points conversion rate
 conversion = function(amount_spent) {
@@ -158,35 +189,32 @@ if (income_condition == 0 && goal_condition == 0){
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost $'+savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
   '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
-  '<p>Your objective is to score as many points as possible.</p>' +
-  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+  '<p>Your objective is to score as many points as possible.</p>'
 } else if (income_condition == 1 && goal_condition == 0){
   var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
   'You will receive $'+min_income+'-'+max_income+' each month that can be spent or saved.</p>' +
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost $'+savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
   '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
-  '<p>Your objective is to score as many points as possible.</p>' +
-  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+  '<p>Your objective is to score as many points as possible.</p>'
 } else if (income_condition == 0 && goal_condition == 1){
   var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
   'You will receive $'+income+' each month that can be spent or saved.</p>' +
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost between $'+min_savings_goal+'-'+max_savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
   '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
-  '<p>Your objective is to score as many points as possible.</p>' +
-  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+  '<p>Your objective is to score as many points as possible.</p>'
 } else {
   var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
   'You will receive $'+min_income+'-'+max_income+' each month that can be spent or saved.</p>' +
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost between $'+min_savings_goal+'-'+max_savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
   '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
-  '<p>Your objective is to score as many points as possible.</p>' +
-  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+  '<p>Your objective is to score as many points as possible.</p>'
 }
 
-var instructions_7 = '<b><u>Summary</u></b>' + instruction_summary_string
+var instructions_7 = '<b><u>Summary</u></b>' + instruction_summary_string +
+'<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
 
 var starting_instructions = {
 
@@ -214,6 +242,9 @@ var start_practice_rounds = {
     on_finish: function(trial) {
 
       // add initial savings (first round only)
+      if (income_condition == 1){
+        income = income_array_p[month-1]
+      }
       savings += income
     }
 };
@@ -268,6 +299,9 @@ var choice_p = {
     })
 
     // add savings for next round
+    if (income_condition == 1){
+      income = income_array_p[month]
+    }
     savings += income
 
     // update month for next round
@@ -320,7 +354,8 @@ var end_stage_p = {
 var instructions_reminder = {
     type: 'html-button-response',
     stimulus: function() {
-      return '<b><u>Reminder</u></b>' + instruction_summary_string
+      return '<b><u>Reminder</u></b>' + instruction_summary_string +
+      '<br><p>Click the <b>START</b> button when you are ready to begin the experiment stage.</p>'
     },
     choices: ['<p style="font-size:130%;line-height:0%;"><b>START!</b></p>'],
     on_finish: function(trial) {
