@@ -9,23 +9,31 @@ var savings = 0;
 var month = 1;
 var cum_spending = 0
 
-  // common parameters
-var savings_per_round = 500;
+  // income parameters
+var income = 500;
+var min_income = 250;
+var max_income = 750;
 
-  // practice stage parameters
-var n_practice_rounds = 1;
-    // show savings goal?
-var goal_tracker = false;
-
-  // exp stage parameters
+  // savings goal parameters
 var n_exp_rounds = 2;
 var savings_goal = 6000;
+var min_savings_goal = 4000;
+var max_savings_goal = 8000;
+
+  // practice stage length
+var n_practice_rounds = 1;
+
+  // show savings goal?
+var goal_tracker = false;
 
   // randomise experimental conditions
 
     // vary whether income and goal are certain; 0 = certain, 1 = uncertain
 var income_condition = Math.round(Math.random())
 var goal_condition = Math.round(Math.random())
+
+console.log(income_condition)
+console.log(goal_condition)
 
   // points conversion rate
 conversion = function(amount_spent) {
@@ -100,40 +108,87 @@ var participant_details = {
 }
 
 /* instructions stage */
+
+  // Welcome screen
 var instructions_1 = 'Welcome to the experiment.' +
 '<p>In this experiment, you will play a financial decision-making game.</p>' +
 '<br><p>Click the <b>NEXT</b> button to continue.</p>'
 
-var instructions_2 = 'You have started a new job that provides you with a monthly income.' +
-'<p>Each month, after covering your expenses, you are left with a disposable income of $'+savings_per_round+'.</p>'
+  // Income screen
+if (income_condition == 0){
+  var instructions_2 = 'You have started a new job that provides you with a monthly income.' +
+  '<p>Each month, after covering your expenses, you are left with a disposable income of $'+income+'.</p>'
+} else {
+  var instructions_2 = 'You have started a new job that provides you with a monthly income.' +
+  '<p>Each month, after covering your expenses, you are left with a disposable income that varies between $'+min_income+'-'+max_income+'.</p>'
+}
 
-var instructions_3 = 'You decide that you want to start savings towards a goal.' +
-'<p>Your goal is to have $'+savings_goal+' saved by the end of the '+n_exp_rounds+' months.</p>'
+  // Savings goal screen
+if (goal_condition == 0){
+  var instructions_3 = 'You decide that you want to start saving for a holiday trip.' +
+  '<p>You know the trip will cost $'+savings_goal+' and want to have enough saved for it after '+n_exp_rounds+' months.</p>'
+} else {
+  var instructions_3 = 'You decide that you want to start saving for a holiday trip.' +
+  "<p>You know the trip will cost between $"+min_savings_goal+'-'+max_savings_goal+' and want to have enough saved for it after '+n_exp_rounds+' months.</p>'
+}
 
+ // Decision screen
 var instructions_4 = 'Each month, you will be asked to decide how much of your money to spend and save.' +
 '<p>Your objective in this game is to manage your spending and saving behaviour to score as many points as possible.</p>' +
 '<br>You can earn points in two ways.' +
 '<p><b>Spending:</b> You will be rewarded with 5 points for every $1 that you spend.</p>' +
-'<p><b>Saving:</b> If you reach your savings goal, you will also be rewarded with '+savings_reward+' points. Otherwise, you will receive no additional points.</p>' +
+'<p><b>Saving:</b> If you have enough saved for your trip at the end of the game, you will also be rewarded with '+savings_reward+' points. Otherwise, you will receive no additional points.</p>' +
 '<br><p>At the end of the experiment, your points from spending and saving will be combined to determine your score.</p>'
 
+  // Reward screen
 var instructions_5 = 'Once all participants have completed the experiment, the top 20% highest scoring participants will receive a real $20 reward.' +
 '<p>If you are one of these participants, you will be contacted via the email address you provided earlier.</p>'
 
+  // Score tracking screen
 var instructions_6 =
 '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
 '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em" color="red"><b>Savings: $'+savings+'</b></font></div>' +
 '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
 '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6em" color="red"><b>Score: '+score+' points</b></font></div>'
 
-var instructions_7 = '<b><u>Summary</u></b>' +
-'<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
-'You will receive $'+savings_per_round+' each month that can be spent or saved.</p>' +
-'<p>Your savings goal is to have $'+savings_goal+' saved by the end of the game.</p>' +
-'<p>Every $1 that you spend will earn 5 points.</p>' +
-'<p>Reaching your savings goal will earn a bonus '+savings_reward+' points. Not reaching it will earn no bonus points.</p>' +
-'<p>Your objective is to score as many points as possible.</p>' +
-'<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+  // Summary screen
+if (income_condition == 0 && goal_condition == 0){
+  var instructions_7 = '<b><u>Summary</u></b>' +
+  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  'You will receive $'+income+' each month that can be spent or saved.</p>' +
+  '<p>You are hoping to have enough saved at the end of the game for a trip that will cost $'+savings_goal+'.</p>' +
+  '<p>Every $1 that you spend will earn 5 points.</p>' +
+  '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
+  '<p>Your objective is to score as many points as possible.</p>' +
+  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+} else if (income_condition == 1 && goal_condition == 0){
+  var instructions_7 = '<b><u>Summary</u></b>' +
+  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  'You will receive $'+min_income+'-'+max_income+' each month that can be spent or saved.</p>' +
+  '<p>You are hoping to have enough saved at the end of the game for a trip that will cost $'+savings_goal+'.</p>' +
+  '<p>Every $1 that you spend will earn 5 points.</p>' +
+  '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
+  '<p>Your objective is to score as many points as possible.</p>' +
+  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+} else if (income_condition == 0 && goal_condition == 1){
+  var instructions_7 = '<b><u>Summary</u></b>' +
+  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  'You will receive $'+income+' each month that can be spent or saved.</p>' +
+  '<p>You are hoping to have enough saved at the end of the game for a trip that will cost between $'+min_savings_goal+'-'+max_savings_goal+'.</p>' +
+  '<p>Every $1 that you spend will earn 5 points.</p>' +
+  '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
+  '<p>Your objective is to score as many points as possible.</p>' +
+  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+} else {
+  var instructions_7 = '<b><u>Summary</u></b>' +
+  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  'You will receive $'+min_income+'-'+max_income+' each month that can be spent or saved.</p>' +
+  '<p>You are hoping to have enough saved at the end of the game for a trip that will cost between $'+min_savings_goal+'-'+max_savings_goal+'.</p>' +
+  '<p>Every $1 that you spend will earn 5 points.</p>' +
+  '<p>Having enough saved for the trip will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
+  '<p>Your objective is to score as many points as possible.</p>' +
+  '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
+}
 
 var starting_instructions = {
 
@@ -161,7 +216,7 @@ var start_practice_rounds = {
     on_finish: function(trial) {
 
       // add initial savings (first round only)
-      savings += savings_per_round
+      savings += income
     }
 };
 
@@ -177,7 +232,7 @@ var choice_p = {
   topright: true,
   preamble: function() {
     return '<b>Month '+month+' of '+n_practice_rounds+'</b>' +
-    '<br><br><p>You have saved another $'+savings_per_round+' this month. Your savings account balance is now $'+savings+'.</p>' +
+    '<br><br><p>You have saved another $'+income+' this month. Your savings account balance is now $'+savings+'.</p>' +
     '<p>Please enter the amount you would like to <b>spend</b> this month in the box below.</p>'
   },
   questions: [
@@ -215,7 +270,7 @@ var choice_p = {
     })
 
     // add savings for next round
-    savings += savings_per_round
+    savings += income
 
     // update month for next round
     month += 1
@@ -268,7 +323,7 @@ var instructions_reminder = {
     type: 'html-button-response',
     stimulus: function() {
       return '<b><u>Reminder</u></b>' +
-      '<p>You will receive $'+savings_per_round+' each month that can be spent or saved.</p>' +
+      '<p>You will receive $'+income+' each month that can be spent or saved.</p>' +
       '<p>Your savings goal is to have saved $'+savings_goal+' after '+n_exp_rounds+' months.</p>' +
       '<p>Every $1 that you spend will earn 5 points.</p>' +
       '<p>Reaching your savings goal will earn a bonus '+savings_reward+' points. Not reaching it will earn no bonus points.</p>' +
@@ -298,7 +353,7 @@ var choice_e = {
   topright: true,
   preamble: function() {
     return '<b>Month '+month+ ' of ' + n_exp_rounds+'</b>' +
-    '<br><br><p>You have saved another $'+savings_per_round+' this month. Your savings account balance is now $'+savings+'.</p>' +
+    '<br><br><p>You have saved another $'+income+' this month. Your savings account balance is now $'+savings+'.</p>' +
     '<p>Please enter the amount you would like to <b>spend</b> this month in the box below.</p>'
   },
   questions: [
@@ -339,7 +394,7 @@ var choice_e = {
     })
 
     // add savings for next round
-    savings += savings_per_round
+    savings += income
 
     // update month for next round
     month += 1
@@ -376,7 +431,7 @@ var end_exp_rounds = {
     on_finish: function(trial) {
 
       // subtract extra savings added during final trial
-      savings += -savings_per_round
+      savings += -income
 
       // calculate spending score
       spending_score = '<h2>Spending</h2>' +
@@ -465,14 +520,14 @@ var debrief = {
 }
 
 timeline.push(fullscreenOn)
-timeline.push(consent)
-timeline.push(participant_details)
+//timeline.push(consent)
+//timeline.push(participant_details)
 timeline.push(instructions_stage)
 timeline.push(practice_rounds)
 timeline.push(end_practice_rounds)
 timeline.push(exp_rounds)
-timeline.push(end_stage_e)
-timeline.push(debrief)
+//timeline.push(end_stage_e)
+//timeline.push(debrief)
 
 /* start the experiment */
 jsPsych.init({
