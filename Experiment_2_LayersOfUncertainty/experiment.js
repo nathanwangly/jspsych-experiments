@@ -153,8 +153,7 @@ var instructions_6 =
 
   // Summary screen
 if (income_condition == 0 && goal_condition == 0){
-  var instructions_7 = '<b><u>Summary</u></b>' +
-  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
   'You will receive $'+income+' each month that can be spent or saved.</p>' +
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost $'+savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
@@ -162,8 +161,7 @@ if (income_condition == 0 && goal_condition == 0){
   '<p>Your objective is to score as many points as possible.</p>' +
   '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
 } else if (income_condition == 1 && goal_condition == 0){
-  var instructions_7 = '<b><u>Summary</u></b>' +
-  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
   'You will receive $'+min_income+'-'+max_income+' each month that can be spent or saved.</p>' +
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost $'+savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
@@ -171,8 +169,7 @@ if (income_condition == 0 && goal_condition == 0){
   '<p>Your objective is to score as many points as possible.</p>' +
   '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
 } else if (income_condition == 0 && goal_condition == 1){
-  var instructions_7 = '<b><u>Summary</u></b>' +
-  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
   'You will receive $'+income+' each month that can be spent or saved.</p>' +
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost between $'+min_savings_goal+'-'+max_savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
@@ -180,8 +177,7 @@ if (income_condition == 0 && goal_condition == 0){
   '<p>Your objective is to score as many points as possible.</p>' +
   '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
 } else {
-  var instructions_7 = '<b><u>Summary</u></b>' +
-  '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
+  var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' months.</p>' +
   'You will receive $'+min_income+'-'+max_income+' each month that can be spent or saved.</p>' +
   '<p>You are hoping to have enough saved at the end of the game for a trip that will cost between $'+min_savings_goal+'-'+max_savings_goal+'.</p>' +
   '<p>Every $1 that you spend will earn 5 points.</p>' +
@@ -189,6 +185,8 @@ if (income_condition == 0 && goal_condition == 0){
   '<p>Your objective is to score as many points as possible.</p>' +
   '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
 }
+
+var instructions_7 = '<b><u>Summary</u></b>' + instruction_summary_string
 
 var starting_instructions = {
 
@@ -322,13 +320,7 @@ var end_stage_p = {
 var instructions_reminder = {
     type: 'html-button-response',
     stimulus: function() {
-      return '<b><u>Reminder</u></b>' +
-      '<p>You will receive $'+income+' each month that can be spent or saved.</p>' +
-      '<p>Your savings goal is to have saved $'+savings_goal+' after '+n_exp_rounds+' months.</p>' +
-      '<p>Every $1 that you spend will earn 5 points.</p>' +
-      '<p>Reaching your savings goal will earn a bonus '+savings_reward+' points. Not reaching it will earn no bonus points.</p>' +
-      '<p>Your objective is to score as many points as possible.</p>' +
-      '<br><p>Click the <b>START</b> button when you are ready to begin the experiment stage.</p>'
+      return '<b><u>Reminder</u></b>' + instruction_summary_string
     },
     choices: ['<p style="font-size:130%;line-height:0%;"><b>START!</b></p>'],
     on_finish: function(trial) {
@@ -443,23 +435,44 @@ var end_exp_rounds = {
         // conditional on reaching savings goal
       remaining_balance = savings - savings_goal
 
-      if (remaining_balance >= 0 ) {
-        savings_score = '<h2>Saving</h2>' +
-        '<br><p>The goal in this experiment was to save $'+savings_goal+'.</p>' +
-        '<p>You had $'+savings+' saved at the end of the final month.' +
-        '<p>Congratulations! By reaching this goal, you have earned a bonus '+savings_reward+' points.'
+      if (goal_condition == 0){
+        if (remaining_balance >= 0 ) {
+          savings_score = '<h2>Saving</h2>' +
+          '<br><p>You were hoping to have $'+savings_goal+' saved for your holiday trip.</p>' +
+          '<p>You had $'+savings+' saved at the end of the final month.' +
+          '<p>Congratulations! By having enough saved, you have earned a bonus '+savings_reward+' points.'
 
-        total_score = score + savings_reward
+          total_score = score + savings_reward
 
+        } else {
+          savings_score = '<h2>Saving</h2>' +
+          '<br><p>You were hoping to have $'+savings_goal+' saved for your holiday trip.</p>' +
+          '<p>You had $'+savings+' saved at the end of the final month.' +
+          '<p>Unfortunately, you did not have enough saved! You have earned 0 bonus points.'
+
+          // no reward for failure to meet savings goal
+          savings_reward = 0
+          total_score = score + savings_reward
+        }
       } else {
-        savings_score = '<h2>Saving</h2>' +
-        '<br><p>The goal in this experiment was to save $'+savings_goal+'.</p>' +
-        '<p>You had $'+savings+' saved at the end of the final month.' +
-        '<p>Unfortunately, you have not reached this goal! You have earned 0 bonus points.'
+        if (remaining_balance >= 0 ) {
+          savings_score = '<h2>Saving</h2>' +
+          '<br><p>The holiday trip ended up costing $'+savings_goal+'.</p>' +
+          '<p>You had $'+savings+' saved at the end of the final month.' +
+          '<p>Congratulations! By having enough saved, you have earned a bonus '+savings_reward+' points.'
 
-        // no reward for failure to meet savings goal
-        savings_reward = 0
-        total_score = score + savings_reward
+          total_score = score + savings_reward
+
+        } else {
+          savings_score = '<h2>Saving</h2>' +
+          '<br><p>The holiday trip ended up costing $'+savings_goal+'.</p>' +
+          '<p>You had $'+savings+' saved at the end of the final month.' +
+          '<p>Unfortunately, you did not have enough saved! You have earned 0 bonus points.'
+
+          // no reward for failure to meet savings goal
+          savings_reward = 0
+          total_score = score + savings_reward
+        }
       }
 
       final_score = '<h2>Your final score is: '+total_score+' points</h2>' +
@@ -526,7 +539,7 @@ timeline.push(instructions_stage)
 timeline.push(practice_rounds)
 timeline.push(end_practice_rounds)
 timeline.push(exp_rounds)
-//timeline.push(end_stage_e)
+timeline.push(end_stage_e)
 //timeline.push(debrief)
 
 /* start the experiment */
