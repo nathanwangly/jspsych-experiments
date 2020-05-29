@@ -13,29 +13,28 @@ var cum_spending = 0
 var savings_per_round = 500;
 
   // practice stage parameters
-var n_practice_rounds = 10;
+var n_practice_rounds = 1;
     // show savings goal?
 var goal_tracker = false;
 
   // exp stage parameters
-var n_exp_rounds = 30;
+var n_exp_rounds = 2;
 var savings_goal = 6000;
 
-    // vary savings reward based on condition; 0 = low, 1 = high
-var condition = Math.round(Math.random())
-if (condition == 0){
-  group = 'low savings reward' //max points earned by saving nothing and spending all money
-  var savings_reward = 15000
-} else {
-  group = 'high savings reward' //max points earned by reaching savings reward and spending all other money
-  var savings_reward = 45000
-}
+  // randomise experimental conditions
+
+    // vary whether income and goal are certain; 0 = certain, 1 = uncertain
+var income_condition = Math.round(Math.random())
+var goal_condition = Math.round(Math.random())
 
   // points conversion rate
 conversion = function(amount_spent) {
   points = amount_spent * 5
   return(Math.round(points))
 }
+
+  // reward for reaching savings goal
+savings_reward = 45000
 
 /* participant ID */
 var participant_id = jsPsych.randomization.randomID(5); // generate a random subject ID with 5 characters
@@ -44,7 +43,8 @@ var participant_id = jsPsych.randomization.randomID(5); // generate a random sub
 jsPsych.data.addProperties({
   participantID: participant_id,
   dateTime: new Date().toLocaleString(),
-  group: group
+  income_condition: income_condition,
+  goal_condition: goal_condition
 });
 
 /* open in fullscreen */
@@ -475,48 +475,9 @@ timeline.push(end_stage_e)
 timeline.push(debrief)
 
 /* start the experiment */
-jatos.onLoad(function() {
-  jsPsych.init({
-  timeline: timeline,
-  on_finish: function(){
-    var resultJson = jsPsych.data.get().json();
-    jatos.submitResultData(resultJson, jatos.startNextComponent);
-  }
-});
-});
-
-jatos.onLoad(
-  function () {
-    var finish_url_base = jatos.studyJsonInput.finish_url_base;
-    var sona_id = jatos.urlQueryParameters.id;
-
-    // ID is undefined if not coming from Sona
-    if (sona_id === undefined) {
-      sona_id = null;
+jsPsych.init({
+    timeline: timeline,
+    on_finish: function(){
+      jsPsych.data.displayData();
     }
-
-    jsPsych.data.addProperties({sona_id: sona_id});
-
-    var redirect_url = null;
-
-    if (sona_id) {
-      redirect_url = finish_url_base + sona_id;
-    } else {
-      redirect_url = "https://unsw-psy.sona-systems.com";
-    }
-
-    jsPsych.init({
-      timeline: timeline,
-      on_finish: function(){
-        var resultJson = jsPsych.data.get().json();
-        jatos.submitResultData(resultJson, jatos.startNextComponent);
-      }
-      .done(jatos.endStudyAjax)
-      .done(
-        () => {
-          window.location.href = redirect_url;
-        }
-      );
-    });
-  }
-);
+});
