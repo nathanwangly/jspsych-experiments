@@ -300,6 +300,7 @@ var choice_p = {
     jsPsych.data.addDataToLastTrial({
       stage: 'practice',
       month: month,
+      income: income,
       starting_savings: response + savings,
       amount_spent: response,
       points_earned: points_earned,
@@ -426,6 +427,7 @@ var choice_e = {
     jsPsych.data.addDataToLastTrial({
       stage: 'exp',
       month: month,
+      income: income,
       starting_savings: response + savings,
       amount_spent: response,
       points_earned: points_earned,
