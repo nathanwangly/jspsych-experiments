@@ -15,13 +15,13 @@ var min_income = 250;
 var max_income = 750;
 
   // savings goal parameters
-var n_exp_rounds = 3;
-var savings_goal = 100;
+var n_exp_rounds = 30;
+var savings_goal = 6000;
 var min_savings_goal = 4000;
 var max_savings_goal = 8000;
 
   // practice stage length
-var n_practice_rounds = 1;
+var n_practice_rounds = 10;
 
   // show savings goal?
 var goal_tracker = false;
