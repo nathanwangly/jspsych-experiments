@@ -67,11 +67,6 @@ if (income_condition == 0){
                                   682, 688, 693, 716, 733])
 }
 
-console.log(income_condition)
-console.log(goal_condition)
-console.log(income_array_p)
-console.log(income_array_exp)
-
   // points conversion rate
 conversion = function(amount_spent) {
   points = amount_spent * 5
