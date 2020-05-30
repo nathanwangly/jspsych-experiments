@@ -119,12 +119,12 @@ jsPsych.plugins['free-text-response'] = (function() {
 
     // show top left corner text
     if(trial.topleft == true){
-      html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="6em"><b>Savings: $'+savings+'</b></font></div>';
+      html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em"><b>Savings: $'+savings+'</b></font></div>';
     }
 
     // show top right corner text
     if(trial.topright == true){
-      html += '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="6em"><b>Score: '+score+' points</b></font></div>';
+      html += '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="5em"><b>Score: '+score+' points</b></font></div>';
     }
 
     // show preamble text
