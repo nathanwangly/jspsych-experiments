@@ -14,18 +14,14 @@ var income = 500;
 var min_income = 250;
 var max_income = 750;
 
-    // income arrays for uncertain income conditions
-var income_array_p = [400, 500, 600]
-var income_array_exp = [100, 200, 300]
-
   // savings goal parameters
-var n_exp_rounds = 3;
+var n_exp_rounds = 30;
 var savings_goal = 100;
 var min_savings_goal = 4000;
 var max_savings_goal = 8000;
 
   // practice stage length
-var n_practice_rounds = 3;
+var n_practice_rounds = 10;
 
   // show savings goal?
 var goal_tracker = false;
@@ -36,7 +32,7 @@ var goal_tracker = false;
 var income_condition = Math.round(Math.random())
 var goal_condition = Math.round(Math.random())
 
-    // shuffle income array if in uncertain income condition
+    // function to shuffle array
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -56,9 +52,19 @@ function shuffle(array) {
   return array;
 }
 
-if (income_condition == 1){
-  income_array_p = shuffle(income_array_p)
-  income_array_exp = shuffle(income_array_exp)
+  // income arrays
+if (income_condition == 0){
+  var income_array_p = Array(n_practice_rounds).fill(income)
+  var income_array_exp = Array(n_exp_rounds).fill(income)
+} else {
+  var income_array_p = shuffle([320, 341, 446, 463, 496,
+                                524, 529, 546, 641, 694])
+  var income_array_exp = shuffle([259, 269, 292, 310, 333,
+                                  336, 357, 387, 403, 417,
+                                  418, 426, 432, 462, 468,
+                                  500, 509, 513, 551, 616,
+                                  620, 633, 638, 661, 678,
+                                  682, 688, 693, 716, 733])
 }
 
 console.log(income_condition)
@@ -83,7 +89,10 @@ jsPsych.data.addProperties({
   participantID: participant_id,
   dateTime: new Date().toLocaleString(),
   income_condition: income_condition,
-  goal_condition: goal_condition
+  goal_condition: goal_condition,
+  income_array_p: income_array_p,
+  income_array_exp: income_array_exp
+
 });
 
 /* open in fullscreen */
@@ -242,9 +251,7 @@ var start_practice_rounds = {
     on_finish: function(trial) {
 
       // add initial savings (first round only)
-      if (income_condition == 1){
-        income = income_array_p[month-1]
-      }
+      income = income_array_p[0]
       savings += income
     }
 };
@@ -299,16 +306,12 @@ var choice_p = {
     })
 
     // add savings for next round (except if last round)
-    if (month < n_practice_rounds){
-      if (income_condition == 1){
-        income = income_array_p[month]
-      }
-      savings += income
+    income = income_array_p[month]
+    savings += income
 
-      // update month for next round
-      month += 1
-    }
-  }  
+    // update month for next round
+    month += 1
+  }
 };
 
 var feedback_p = {
@@ -369,9 +372,7 @@ var instructions_reminder = {
       cum_spending = 0;
 
       // add initial savings (first round only)
-      if (income_condition == 1){
-        income = income_array_exp[month-1]
-      }
+      income = income_array_exp[0]
       savings += income
     }
 };
@@ -430,9 +431,7 @@ var choice_e = {
 
     // add savings for next round (except if last round)
     if (month < n_exp_rounds){
-      if (income_condition == 1){
-        income = income_array_exp[month]
-      }
+      income = income_array_exp[month]
       savings += income
 
       // update month for next round
