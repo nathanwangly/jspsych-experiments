@@ -616,20 +616,24 @@ jatos.onLoad(
       redirect_url = finish_url_base + sona_id;
     } else {
       redirect_url = "https://unsw-psy.sona-systems.com";
-    }
+    };
 
     jsPsych.init({
       timeline: timeline,
       on_finish: function(){
         var resultJson = jsPsych.data.get().json();
-        jatos.submitResultData(resultJson, jatos.startNextComponent);
+
+        jatos.submitResultData(resultJson, jatos.startNextComponent)
+            .done(jatos.endStudyAjax)
+            .done(
+                () => {
+                    // once we're all done, redirect them to Sona
+                    // to receive their credit
+                    window.location.href = redirect_url;
+                }
+            );
+        },
       }
-      .done(jatos.endStudyAjax)
-      .done(
-        () => {
-          window.location.href = redirect_url;
-        }
-      );
-    });
+    );
   }
 );
