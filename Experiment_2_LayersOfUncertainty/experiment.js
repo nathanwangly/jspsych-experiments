@@ -15,13 +15,13 @@ var min_income = 250;
 var max_income = 750;
 
   // savings goal parameters
-var n_exp_rounds = 30;
+var n_exp_rounds = 3;
 var savings_goal = 100;
 var min_savings_goal = 4000;
 var max_savings_goal = 8000;
 
   // practice stage length
-var n_practice_rounds = 10;
+var n_practice_rounds = 1;
 
   // show savings goal?
 var goal_tracker = false;
@@ -298,6 +298,8 @@ var choice_p = {
 
     // record amount spent, points earned, points total, remaining savings
     jsPsych.data.addDataToLastTrial({
+      stage: 'practice',
+      month: month,
       starting_savings: response + savings,
       amount_spent: response,
       points_earned: points_earned,
@@ -422,6 +424,8 @@ var choice_e = {
 
     // record amount spent, points earned, points total, remaining savings
     jsPsych.data.addDataToLastTrial({
+      stage: 'exp',
+      month: month,
       starting_savings: response + savings,
       amount_spent: response,
       points_earned: points_earned,
