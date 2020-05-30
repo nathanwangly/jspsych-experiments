@@ -583,14 +583,14 @@ var debrief = {
 }
 
 timeline.push(fullscreenOn)
-//timeline.push(consent)
-//timeline.push(participant_details)
+timeline.push(consent)
+timeline.push(participant_details)
 timeline.push(instructions_stage)
 timeline.push(practice_rounds)
 timeline.push(end_practice_rounds)
 timeline.push(exp_rounds)
 timeline.push(end_stage_e)
-//timeline.push(debrief)
+timeline.push(debrief)
 
 /* start the experiment */
 jsPsych.init({
