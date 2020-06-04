@@ -180,11 +180,19 @@ var instructions_5 = 'Once all participants have completed the experiment, the t
 '<p>If you are one of these participants, you will be contacted via the email address you provided earlier.</p>'
 
   // Score tracking screen
-var instructions_6 =
-'<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
-'<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em" color="red"><b>Savings: $'+savings+'</b></font></div>' +
-'<p>Your points total will be tracked in the top right corner of the screen.</p>' +
-'<div id="jspsych-survey-text-custom-topright" class="topright"><font size="5em" color="red"><b>Score: '+score+' points</b></font></div>'
+if (goal_condition == 0){
+  var instructions_6 =
+  '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
+  '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em" color="red"><b>Savings: $'+savings+' / $'+savings_goal+'</b></font></div>' +
+  '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
+  '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="5em" color="red"><b>Score: '+score+' points</b></font></div>'
+} else {
+  var instructions_6 =
+  '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
+  '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em" color="red"><b>Savings: $'+savings+' / $'+min_savings_goal+'-$'+max_savings_goal+'</b></font></div>' +
+  '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
+  '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="5em" color="red"><b>Score: '+score+' points</b></font></div>'
+}
 
   // Summary screen
 if (income_condition == 0 && goal_condition == 0){
