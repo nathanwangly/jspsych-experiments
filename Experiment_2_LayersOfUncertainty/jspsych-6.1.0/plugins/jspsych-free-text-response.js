@@ -119,7 +119,11 @@ jsPsych.plugins['free-text-response'] = (function() {
 
     // show top left corner text
     if(trial.topleft == true){
-      html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em"><b>Savings: $'+savings+'</b></font></div>';
+      if(goal_condition == 0){
+        html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em"><b>Savings: $'+savings+' / $'+savings_goal+'</b></font></div>';
+      } else {
+        html += '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em"><b>Savings: $'+savings+' / $'+min_savings_goal+'-$'+max_savings_goal+'</b></font></div>';
+      }
     }
 
     // show top right corner text
