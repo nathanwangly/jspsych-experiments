@@ -171,7 +171,7 @@ if (goal_condition == 0){
 var instructions_4 = 'Each month, you will be asked to decide how much of your money to spend and save.' +
 '<p>Your objective in this game is to manage your spending and saving behaviour to score as many points as possible.</p>' +
 '<br>You can earn points in two ways.' +
-'<p><b>Spending:</b> You will be rewarded with 5 points for every $1 that you spend.</p>' +
+'<p><b>Spending:</b> You will be rewarded with 5 points for every $1 that you spend. This represents the benefit you gain from making purchases.</p>' +
 '<p><b>Saving:</b> If you have enough saved for your trip at the end of the game, you will also be rewarded with '+savings_reward+' points. Otherwise, you will receive no additional points.</p>' +
 '<br><p>At the end of the experiment, your points from spending and saving will be combined to determine your score.</p>'
 
