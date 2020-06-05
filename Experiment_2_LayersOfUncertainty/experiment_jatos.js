@@ -633,7 +633,7 @@ jatos.onLoad(
 
         jsPsych.init(
             {
-                timeline: [timeline],
+                timeline: timeline,
                 on_finish: function() {
 
                     var results = jsPsych.data.get().json();
