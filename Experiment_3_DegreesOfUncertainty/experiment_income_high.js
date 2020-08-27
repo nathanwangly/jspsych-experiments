@@ -462,7 +462,6 @@ var debrief = {
   url: 'debrief_exp.html',
   cont_btn: 'been_debriefed'
 }
-
 timeline.push(instructions_stage)
 timeline.push(practice_rounds)
 timeline.push(end_practice_rounds)
