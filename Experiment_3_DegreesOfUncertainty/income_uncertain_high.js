@@ -496,15 +496,15 @@ jatos.onLoad(
               // e.g., https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=1353&credit_token=4f77b917b98049538f0371bd2fa1a350&survey_code=
             var finishURLBase = jatos.studyJsonInput.finishURLBase;
 
-            var redirect_url = null;
+            var redirectURL = null;
 
             if (initialData.sonaID) {
                 // if we have a Sona ID, then use it to form the URL that the
                 // participant needs to load in order to get credit
-                redirect_url = finish_url_base + sona_id;
+                redirectURL = finishURLBase + sonaID;
             }
             else {
-                redirect_url = "https://unsw-psy.sona-systems.com";
+                redirectURL = "https://unsw-psy.sona-systems.com";
             }
 
             // collect results
@@ -515,7 +515,7 @@ jatos.onLoad(
                     () => {
                         // once we're all done, redirect them to Sona
                         // to receive their credit
-                        window.location.href = redirect_url;
+                        window.location.href = redirectURL;
                     }
                 );
           }
