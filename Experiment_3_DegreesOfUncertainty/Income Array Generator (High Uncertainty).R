@@ -7,7 +7,7 @@ mean_exp <- 0
 
 # Practice round incomes
 while (mean_p != 500){
-  incomes_p <- rnorm(n = 10, mean = 500, sd = 175) %>% 
+  incomes_p <- rnorm(n = 10, mean = 500, sd = 350) %>% 
     round()
   
   # Conditions:
@@ -26,7 +26,7 @@ incomes_p %>%
 
 # Experiment round incomes
 while (mean_exp != 500){
-  incomes_exp <- rnorm(n = 30, mean = 500, sd = 175) %>% 
+  incomes_exp <- rnorm(n = 30, mean = 500, sd = 350) %>% 
     round()
   
   # Conditions:

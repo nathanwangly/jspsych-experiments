@@ -44,11 +44,11 @@ var income_array_exp = shuffle([259, 269, 292, 310, 333,
                                 682, 688, 693, 716, 733])
 
   // savings goal parameters
-var n_exp_rounds = 30;
+var n_exp_rounds = 3;
 var savings_goal = 6000;
 
   // practice stage length
-var n_practice_rounds = 10;
+var n_practice_rounds = 1;
 
   // show savings goal?
 var goal_tracker = false;
@@ -66,37 +66,32 @@ conversion = function(amount_spent) {
   // reward for reaching savings goal
 savings_reward = 45000
 
-/* participant ID */
-var participant_id = jsPsych.randomization.randomID(5); // generate a random subject ID with 5 characters
-
-  // track participant ID in experiment data
-jsPsych.data.addProperties({
-  participantID: participant_id,
-  dateTime: new Date().toLocaleString(),
-  uncertain_type: uncertain_type,
-  uncertain_level: uncertain_level,
-  income_array_p: income_array_p,
-  income_array_exp: income_array_exp
-});
+/* open in fullscreen */
+var fullscreenOn = {
+type: 'fullscreen',
+fullscreen_mode: true,
+message: function() {
+  return 'Welcome to the experiment.' +
+  '<p>In this experiment, you will play a financial decision-making game.</p>' +
+  '<br><p>Click the <b>START</b> button to continue.</p>'
+},
+button_label: 'START',
+delay_after: 200
+}
 
 /* instructions stage */
 
-  // Welcome screen
-var instructions_1 = 'Welcome to the experiment.' +
-'<p>In this experiment, you will play a financial decision-making game.</p>' +
-'<br><p>Click the <b>NEXT</b> button to continue.</p>'
-
   // Income screen
-var instructions_2 = 'You have started a new job that provides you with a weekly income.' +
+var instructions_1 = 'You have started a new job that provides you with a weekly income.' +
 '<p>Each week, after covering your expenses, you are left with a disposable income that varies between $'+min_income+'-$'+max_income+'.</p>'
 
   // Savings goal screen
-var instructions_3 = 'The air-conditioning system in your home has recently been having issues, so you would like to start saving up to repair it.' +
+var instructions_2 = 'The air-conditioning system in your home has recently been having issues, so you would like to start saving up to repair it.' +
 '<p>After organising an inspection, the tradesperson tells you that the total repair cost will be $'+savings_goal+'.</p>' +
 '<p>You decide that you want to have enough saved for these repairs within '+n_exp_rounds+' weeks to prepare yourself for summer and its heatwaves.</p>'
 
  // Decision screen
-var instructions_4 = 'Each week, you will be asked to decide how much of your money to spend and save.' +
+var instructions_3 = 'Each week, you will be asked to decide how much of your money to spend and save.' +
 '<p>Your objective in this game is to manage your spending and saving behaviour to score as many points as possible.</p>' +
 '<br>You can earn points in two ways.' +
 '<p><b>Spending:</b> You will be rewarded with 5 points for every $1 that you spend. This represents the benefit you gain from making purchases.</p>' +
@@ -104,11 +99,11 @@ var instructions_4 = 'Each week, you will be asked to decide how much of your mo
 '<br><p>At the end of the experiment, your points from spending and saving will be combined to determine your score.</p>'
 
   // Reward screen
-var instructions_5 = 'Once all participants have completed the experiment, the top 20% highest scoring participants will receive a real $20 reward.' +
+var instructions_4 = 'Once all participants have completed the experiment, the top 20% highest scoring participants will receive a real $20 reward.' +
 '<p>If you are one of these participants, you will be contacted via the email address you provided earlier.</p>'
 
 // Score tracking screen
-var instructions_6 =
+var instructions_5 =
 '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
 '<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em" color="red"><b>Savings: $'+savings+' / $'+savings_goal+'</b></font></div>' +
 '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
@@ -123,7 +118,7 @@ var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' we
 '<p>Having enough saved for the repairs will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
 '<p>Your objective is to score as many points as possible.</p>'
 
-var instructions_7 = '<b><u>Summary</u></b>' + instruction_summary_string +
+var instructions_6 = '<b><u>Summary</u></b>' + instruction_summary_string +
 '<br><p>Click the <b>NEXT</b> button when you are ready to proceed to the practice stage.</p>'
 
 var starting_instructions = {
@@ -135,10 +130,9 @@ var starting_instructions = {
     instructions_3,
     instructions_4,
     instructions_5,
-    instructions_6,
-    instructions_7
+    instructions_6
   ],
-  show_clickable_nav: true
+  show_clickable_nav: true,
 };
 
 var start_practice_rounds = {
@@ -463,6 +457,7 @@ var debrief = {
   cont_btn: 'been_debriefed'
 }
 
+timeline.push(fullscreenOn)
 timeline.push(instructions_stage)
 timeline.push(practice_rounds)
 timeline.push(end_practice_rounds)
@@ -471,9 +466,59 @@ timeline.push(end_stage_e)
 timeline.push(debrief)
 
 /* start the experiment */
-jsPsych.init({
-    timeline: timeline,
-    on_finish: function(){
-      jsPsych.data.displayData();
+jatos.onLoad(
+    function () {
+
+      // collect variables passed from previous component
+      var initialData = jatos.studySessionData
+
+      // track data
+      jsPsych.data.addProperties({
+        sonaID: initialData.sonaID,
+        participantID: initialData.participantID,
+        dateTime: new Date().toLocaleString(),
+        age: initialData.age,
+        sex: initialData.sex,
+        email: initialData.email,
+        wants_copy: initialData.wants_copy,
+        uncertain_type: uncertain_type,
+        uncertain_level: uncertain_level,
+        income_array_p: income_array_p,
+        income_array_exp: income_array_exp
+      });
+
+      jsPsych.init({
+          timeline: timeline,
+          on_finish: function(){
+
+            // prepare for SONA auto-crediting
+              // completion URL stored in study properties
+              // e.g., https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=1353&credit_token=4f77b917b98049538f0371bd2fa1a350&survey_code=
+            var finishURLBase = jatos.studyJsonInput.finishURLBase;
+
+            var redirect_url = null;
+
+            if (initialData.sonaID) {
+                // if we have a Sona ID, then use it to form the URL that the
+                // participant needs to load in order to get credit
+                redirect_url = finish_url_base + sona_id;
+            }
+            else {
+                redirect_url = "https://unsw-psy.sona-systems.com";
+            }
+
+            // collect results
+            var results = jsPsych.data.get().json();
+            jatos.submitResultData(results)
+                .done(jatos.endStudyAjax)
+                .done(
+                    () => {
+                        // once we're all done, redirect them to Sona
+                        // to receive their credit
+                        window.location.href = redirect_url;
+                    }
+                );
+          }
+      });
     }
-});
+);
