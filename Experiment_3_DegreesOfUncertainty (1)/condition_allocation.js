@@ -15,7 +15,7 @@ var welcomeScreen = {
   type: 'html-button-response',
   stimulus: '<h1>Financial Decision-Making Task</h1>' +
   '<br><p><img src="img/piggybank.jpg" style="width:500px;height:auto"></img></p>' +
-  '<p>Thank you for participating in SONA Study XXX.</p>' +
+  '<p>Thank you for participating in SONA Study 403.</p>' +
   '<p>Before the experiment starts, you will be asked to complete the participant consent form and to provide some demographic details.</p>' +
   '<p>Press <b>START</b> when you are ready to begin.',
   choices: ['START']
