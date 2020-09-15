@@ -32,31 +32,30 @@ var week = 1;
 var cum_spending = 0
 
   // income parameters
-var income = 500;
-var income_array_p = shuffle([457, 460, 484, 489, 496,
-                              507, 515, 525, 531, 536])
-var income_array_exp = shuffle([457, 461, 462, 469, 477,
-                                479, 485, 486, 486, 486,
-                                487, 494, 494, 497, 497,
-                                506, 506, 507, 509, 511,
-                                512, 513, 517, 518, 519,
-                                524, 527, 533, 536, 545])
+var min_income = 50;
+var max_income = 950;
+var income_array_p = shuffle([145, 254, 256, 355, 419,
+                              598, 618, 665, 820, 870])
+var income_array_exp = shuffle([63, 76, 180, 249, 250,
+                                268, 284, 309, 322, 347,
+                                357, 419, 426, 471, 474,
+                                575, 577, 586, 589, 619,
+                                627, 691, 696, 709, 713,
+                                720, 772, 841, 873, 917])
 
   // savings goal parameters
-var n_exp_rounds = 3;
+var n_exp_rounds = 30;
 var savings_goal = 6000;
-var min_savings_goal = 5500;
-var max_savings_goal = 6500;
 
   // practice stage length
-var n_practice_rounds = 1;
+var n_practice_rounds = 10;
 
   // show savings goal?
 var goal_tracker = false;
 
   // set experimental conditions
-var uncertain_type = 'goal'
-var uncertain_level = 'low'
+var uncertain_type = 'income'
+var uncertain_level = 'high'
 
   // points conversion rate
 conversion = function(amount_spent) {
@@ -84,11 +83,11 @@ delay_after: 200
 
   // Income screen
 var instructions_1 = 'You have started a new job that provides you with a weekly income.' +
-'<p>Each week, after covering your expenses, you are left with a disposable income of $'+income+'.</p>'
+'<p>Each week, after covering your expenses, you are left with a disposable income that varies between $'+min_income+'-$'+max_income+'.</p>'
 
   // Savings goal screen
 var instructions_2 = 'The air-conditioning system in your home has recently been having issues, so you would like to start saving up to repair it.' +
-'<p>After organising an inspection, the tradesperson tells you that the total repair cost will range between $'+min_savings_goal+'-$'+max_savings_goal+'.</p>' +
+'<p>After organising an inspection, the tradesperson tells you that the total repair cost will be $'+savings_goal+'.</p>' +
 '<p>You decide that you want to have enough saved for these repairs within '+n_exp_rounds+' weeks to prepare yourself for summer and its heatwaves.</p>'
 
  // Decision screen
@@ -106,15 +105,15 @@ var instructions_4 = 'Once all participants have completed the experiment, the t
 // Score tracking screen
 var instructions_5 =
 '<p>Your savings balance will be tracked in the top left corner of the screen.</p>' +
-'<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em" color="red"><b>Savings: $'+savings+' / $'+min_savings_goal+'-$'+max_savings_goal+'</b></font></div>' +
+'<div id="jspsych-survey-text-custom-topleft" class="topleft"><font size="5em" color="red"><b>Savings: $'+savings+' / $'+savings_goal+'</b></font></div>' +
 '<p>Your points total will be tracked in the top right corner of the screen.</p>' +
 '<div id="jspsych-survey-text-custom-topright" class="topright"><font size="5em" color="red"><b>Score: '+score+' points</b></font></div>'
 
   // Summary screen
 
 var instruction_summary_string = '<p>The game will last for '+n_exp_rounds+ ' weeks.</p>' +
-'You will receive $'+income+' each week that can be spent or saved.</p>' +
-'<p>You are hoping to have enough saved at the end of the game for repairs that will cost between $'+min_savings_goal+'-'+max_savings_goal+'.</p>' +
+'You will receive $'+min_income+'-'+max_income+' each week that can be spent or saved.</p>' +
+'<p>You are hoping to have enough saved at the end of the game for repairs that will cost $'+savings_goal+'.</p>' +
 '<p>Every $1 that you spend will earn 5 points.</p>' +
 '<p>Having enough saved for the repairs will earn a bonus '+savings_reward+' points. Not saving enough will earn no bonus points.</p>' +
 '<p>Your objective is to score as many points as possible.</p>'
@@ -383,7 +382,7 @@ var end_exp_rounds = {
 
       if (remaining_balance >= 0 ) {
         savings_score = '<h2>Saving</h2>' +
-        '<br><p>The air-conditioning repairs ended up costing $'+savings_goal+'.</p>' +
+        '<br><p>You were hoping to have $'+savings_goal+' saved for your air-conditioning repairs.</p>' +
         '<p>You had $'+savings+' saved at the end of the final week.' +
         '<p>Congratulations! By having enough saved, you have earned a bonus '+savings_reward+' points.'
 
@@ -391,7 +390,7 @@ var end_exp_rounds = {
 
       } else {
         savings_score = '<h2>Saving</h2>' +
-        '<br><p>The air-conditioning repairs ended up costing $'+savings_goal+'.</p>' +
+        '<br><p>You were hoping to have $'+savings_goal+' saved for your air-conditioning repairs.</p>' +
         '<p>You had $'+savings+' saved at the end of the final week.' +
         '<p>Unfortunately, you did not have enough saved! You have earned 0 bonus points.'
 
@@ -502,7 +501,7 @@ jatos.onLoad(
             if (initialData.sonaID) {
                 // if we have a Sona ID, then use it to form the URL that the
                 // participant needs to load in order to get credit
-                redirectURL = finishURLBase + sonaID;
+                redirectURL = finishURLBase + initialData.sonaID;
             }
             else {
                 redirectURL = "https://unsw-psy.sona-systems.com";

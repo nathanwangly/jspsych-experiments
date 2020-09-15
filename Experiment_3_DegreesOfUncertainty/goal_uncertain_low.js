@@ -31,32 +31,26 @@ var savings = 0;
 var week = 1;
 var cum_spending = 0
 
-  // income parameters
-var income = 500;
-var income_array_p = shuffle([457, 460, 484, 489, 496,
-                              507, 515, 525, 531, 536])
-var income_array_exp = shuffle([457, 461, 462, 469, 477,
-                                479, 485, 486, 486, 486,
-                                487, 494, 494, 497, 497,
-                                506, 506, 507, 509, 511,
-                                512, 513, 517, 518, 519,
-                                524, 527, 533, 536, 545])
-
   // savings goal parameters
-var n_exp_rounds = 3;
+var n_exp_rounds = 30;
 var savings_goal = 6000;
-var min_savings_goal = 4000;
-var max_savings_goal = 8000;
+var min_savings_goal = 5500;
+var max_savings_goal = 6500;
 
   // practice stage length
-var n_practice_rounds = 1;
+var n_practice_rounds = 10;
+
+// income parameters
+var income = 500;
+var income_array_p = Array(n_practice_rounds).fill(income)
+var income_array_exp = Array(n_exp_rounds).fill(income)
 
   // show savings goal?
 var goal_tracker = false;
 
   // set experimental conditions
 var uncertain_type = 'goal'
-var uncertain_level = 'med'
+var uncertain_level = 'low'
 
   // points conversion rate
 conversion = function(amount_spent) {
@@ -131,8 +125,7 @@ var starting_instructions = {
     instructions_3,
     instructions_4,
     instructions_5,
-    instructions_6,
-    instructions_7
+    instructions_6
   ],
   show_clickable_nav: true,
 };
@@ -503,7 +496,7 @@ jatos.onLoad(
             if (initialData.sonaID) {
                 // if we have a Sona ID, then use it to form the URL that the
                 // participant needs to load in order to get credit
-                redirectURL = finishURLBase + sonaID;
+                redirectURL = finishURLBase + initialData.sonaID;
             }
             else {
                 redirectURL = "https://unsw-psy.sona-systems.com";
